@@ -1,5 +1,6 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@/generated/prisma/client";
+import { setDefaultAutoSelectFamily } from "node:net";
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -22,4 +23,9 @@ export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
+}
+
+// Même raison que pour le seed. Inutile en production (Vercel est proche de Neon).
+if (process.env.NODE_ENV !== "production") {
+  setDefaultAutoSelectFamily(false);
 }
